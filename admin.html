@@ -1213,10 +1213,9 @@
             </form>
 
             <div class="login-hint">
-                <strong>Default Credentials:</strong><br>
-                Username: <strong>admin</strong> | Password: <strong>alshams2024</strong><br>
-                <em>Change these in the JavaScript code for security.</em>
-            </div>
+    <strong>Secure Admin Access</strong><br>
+    Authorized personnel only. Contact administrator for access.
+</div>
         </div>
     </div>
 
@@ -1478,363 +1477,468 @@
         <span id="toastMessage">Action completed successfully!</span>
     </div>
 
-    <script>
-        // ===========================================
-        // CREDENTIALS - CHANGE THESE FOR SECURITY
-        // ===========================================
-        const ADMIN_CREDENTIALS = {
-            username: 'admin',
-            password: 'alshams2024'
+ <script>
+    // ===========================================
+    // CONFIGURATION - UPDATE THIS!
+    // ===========================================
+    const API_URL = 'https://alshams-api.YOUR-SUBDOMAIN.workers.dev';
+    // For local dev: const API_URL = 'http://localhost:8787';
+
+    // ===========================================
+    // API HELPER
+    // ===========================================
+    async function api(endpoint, options = {}) {
+        const token = localStorage.getItem('alshams_token');
+        const headers = {
+            'Content-Type': 'application/json',
+            ...options.headers,
         };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        // ===========================================
-        // AUTH SYSTEM
-        // ===========================================
-        const loginScreen = document.getElementById('loginScreen');
-        const loginForm = document.getElementById('loginForm');
-        const loginError = document.getElementById('loginError');
-        const logoutBtn = document.getElementById('logoutBtn');
+        try {
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                ...options,
+                headers,
+            });
 
-        // Check if already logged in
-        function checkAuth() {
-            const isAuth = sessionStorage.getItem('alshams_admin_auth');
-            if (isAuth === 'true') {
-                loginScreen.classList.add('hidden');
-                loadProducts();
-            } else {
-                loginScreen.classList.remove('hidden');
+            const data = await response.json();
+
+            if (response.status === 401) {
+                localStorage.removeItem('alshams_token');
+                showLoginScreen();
+                throw new Error('Session expired');
             }
-        }
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-
-            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                sessionStorage.setItem('alshams_admin_auth', 'true');
-                loginScreen.classList.add('hidden');
-                loadProducts();
-                showToast('Welcome back, Admin!');
-            } else {
-                loginError.textContent = 'Invalid username or password';
-                setTimeout(() => loginError.textContent = '', 3000);
+            if (!data.success) {
+                throw new Error(data.error || 'Request failed');
             }
-        });
 
-        logoutBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('alshams_admin_auth');
-            loginScreen.classList.remove('hidden');
-            loginForm.reset();
-        });
+            return data;
+        } catch (e) {
+            if (e.message === 'Failed to fetch') {
+                throw new Error('Cannot connect to server. Check your internet connection.');
+            }
+            throw e;
+        }
+    }
 
-        // ===========================================
-        // PRODUCT MANAGEMENT
-        // ===========================================
-        const STORAGE_KEY = 'alshams_products';
-        let products = [];
-        let editingId = null;
-        let deleteId = null;
+    // ===========================================
+    // AUTH SYSTEM
+    // ===========================================
+    const loginScreen = document.getElementById('loginScreen');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-        function getProducts() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
+    function showLoginScreen() {
+        loginScreen.classList.remove('hidden');
+    }
+
+    function hideLoginScreen() {
+        loginScreen.classList.add('hidden');
+    }
+
+    async function checkAuth() {
+        const token = localStorage.getItem('alshams_token');
+        if (!token) {
+            showLoginScreen();
+            return;
         }
 
-        function saveProducts() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        try {
+            await api('/api/auth/verify');
+            hideLoginScreen();
+            await loadProducts();
+            await loadStats();
+        } catch (e) {
+            localStorage.removeItem('alshams_token');
+            showLoginScreen();
         }
+    }
 
-        function loadProducts() {
-            products = getProducts();
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+        const btn = loginForm.querySelector('.login-btn');
+        const originalText = btn.textContent;
+
+        btn.textContent = 'Logging in...';
+        btn.disabled = true;
+        loginError.textContent = '';
+
+        try {
+            const result = await api('/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ username, password }),
+            });
+
+            localStorage.setItem('alshams_token', result.token);
+            hideLoginScreen();
+            await loadProducts();
+            await loadStats();
+            showToast('Welcome back, Admin!');
+        } catch (e) {
+            loginError.textContent = e.message;
+        } finally {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            await api('/api/auth/logout', { method: 'POST' });
+        } catch (e) {}
+        localStorage.removeItem('alshams_token');
+        showLoginScreen();
+        loginForm.reset();
+    });
+
+    // ===========================================
+    // PRODUCT MANAGEMENT
+    // ===========================================
+    let products = [];
+    let editingId = null;
+    let deleteId = null;
+
+    async function loadProducts() {
+        try {
+            const result = await api('/api/products');
+            products = result.products;
             renderProducts();
-            updateStats();
+        } catch (e) {
+            showToast(e.message, true);
+        }
+    }
+
+    async function loadStats() {
+        try {
+            const result = await api('/api/stats');
+            document.getElementById('statTotal').textContent = result.stats.total;
+            document.getElementById('statTools').textContent = result.stats.tools;
+            document.getElementById('statHardware').textContent = result.stats.hardware;
+            document.getElementById('statSupplies').textContent = result.stats.supplies;
+        } catch (e) {
+            console.error('Stats load failed:', e);
+        }
+    }
+
+    function renderProducts(filtered = null) {
+        const grid = document.getElementById('productsGrid');
+        const list = filtered !== null ? filtered : products;
+
+        if (list.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                    </svg>
+                    <h3>No Products Yet</h3>
+                    <p>Start by adding your first product to the inventory</p>
+                </div>
+            `;
+            return;
         }
 
-        function renderProducts(filtered = null) {
-            const grid = document.getElementById('productsGrid');
-            const list = filtered !== null ? filtered : products;
-
-            if (list.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                        </svg>
-                        <h3>No Products Yet</h3>
-                        <p>Start by adding your first product to the inventory</p>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = list.map((p, i) => `
-                <div class="product-item" style="animation-delay: ${i * 0.05}s">
-                    <div class="product-image-wrapper">
-                        <img src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x300/171717/C41E24?text=No+Image'">
-                        <span class="product-category-tag">${p.category}</span>
-                    </div>
-                    <div class="product-info">
-                        <h4>${p.name}</h4>
-                        <p>${p.description}</p>
-                        <div class="product-price">PKR ${Number(p.price).toLocaleString()}</div>
-                        <div class="product-actions">
-                            <button class="action-btn edit" onclick="editProduct('${p.id}')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                </svg>
-                                Edit
-                            </button>
-                            <button class="action-btn delete" onclick="confirmDelete('${p.id}')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"/>
-                                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                                </svg>
-                                Delete
-                            </button>
-                        </div>
+        grid.innerHTML = list.map((p, i) => `
+            <div class="product-item" style="animation-delay: ${i * 0.05}s">
+                <div class="product-image-wrapper">
+                    <img src="${p.image_url}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x300/171717/C41E24?text=No+Image'">
+                    <span class="product-category-tag">${p.category}</span>
+                </div>
+                <div class="product-info">
+                    <h4>${p.name}</h4>
+                    <p>${p.description}</p>
+                    <div class="product-price">PKR ${Number(p.price).toLocaleString()}</div>
+                    <div class="product-actions">
+                        <button class="action-btn edit" onclick="editProduct('${p.id}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                        </button>
+                        <button class="action-btn delete" onclick="confirmDelete('${p.id}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                            </svg>
+                            Delete
+                        </button>
                     </div>
                 </div>
-            `).join('');
+            </div>
+        `).join('');
+    }
+
+    // ===========================================
+    // MODAL
+    // ===========================================
+    const modal = document.getElementById('productModal');
+    const productForm = document.getElementById('productForm');
+
+    document.getElementById('addProductBtn').addEventListener('click', () => openModal());
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('cancelBtn').addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    function openModal(product = null) {
+        editingId = product ? product.id : null;
+        document.getElementById('modalTitle').innerHTML = product ? 'Edit <em>Product</em>' : 'Add New <em>Product</em>';
+
+        if (product) {
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productStock').value = product.stock || 'In Stock';
+            document.getElementById('previewImg').src = product.image_url;
+            document.getElementById('imagePreview').classList.add('show');
+        } else {
+            productForm.reset();
+            document.getElementById('imagePreview').classList.remove('show');
+            document.getElementById('productId').value = '';
         }
 
-        function updateStats() {
-            document.getElementById('statTotal').textContent = products.length;
-            document.getElementById('statTools').textContent = products.filter(p => p.category === 'Specialized Tools').length;
-            document.getElementById('statHardware').textContent = products.filter(p => p.category === 'Industrial Hardware').length;
-            document.getElementById('statSupplies').textContent = products.filter(p => p.category === 'Essential Supplies').length;
+        modal.classList.add('active');
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            productForm.reset();
+            document.getElementById('imagePreview').classList.remove('show');
+            document.getElementById('urlInputGroup').classList.remove('show');
+            editingId = null;
+        }, 300);
+    }
+
+    // ===========================================
+    // IMAGE UPLOAD
+    // ===========================================
+    const imageUploadArea = document.getElementById('imageUploadArea');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    const toggleUrlBtn = document.getElementById('toggleUrlBtn');
+    const urlInputGroup = document.getElementById('urlInputGroup');
+    const imageUrl = document.getElementById('imageUrl');
+
+    let currentImageData = null;
+    let isNewImage = false;
+
+    imageUploadArea.addEventListener('click', () => imageInput.click());
+
+    imageUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        imageUploadArea.classList.add('dragover');
+    });
+
+    imageUploadArea.addEventListener('dragleave', () => {
+        imageUploadArea.classList.remove('dragover');
+    });
+
+    imageUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        imageUploadArea.classList.remove('dragover');
+        if (e.dataTransfer.files.length) handleImageFile(e.dataTransfer.files[0]);
+    });
+
+    imageInput.addEventListener('change', (e) => {
+        if (e.target.files.length) handleImageFile(e.target.files[0]);
+    });
+
+    function handleImageFile(file) {
+        if (!file.type.startsWith('image/')) {
+            showToast('Please upload a valid image file', true);
+            return;
         }
 
-        // ===========================================
-        // MODAL
-        // ===========================================
-        const modal = document.getElementById('productModal');
-        const productForm = document.getElementById('productForm');
-
-        document.getElementById('addProductBtn').addEventListener('click', () => openModal());
-        document.getElementById('modalClose').addEventListener('click', closeModal);
-        document.getElementById('cancelBtn').addEventListener('click', closeModal);
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-
-        function openModal(product = null) {
-            editingId = product ? product.id : null;
-            document.getElementById('modalTitle').innerHTML = product ? 'Edit <em>Product</em>' : 'Add New <em>Product</em>';
-
-            if (product) {
-                document.getElementById('productId').value = product.id;
-                document.getElementById('productName').value = product.name;
-                document.getElementById('productCategory').value = product.category;
-                document.getElementById('productPrice').value = product.price;
-                document.getElementById('productDescription').value = product.description;
-                document.getElementById('productStock').value = product.stock || 'In Stock';
-                document.getElementById('previewImg').src = product.image;
-                document.getElementById('imagePreview').classList.add('show');
-                document.getElementById('imageUrl').value = product.image.startsWith('http') ? product.image : '';
-            } else {
-                productForm.reset();
-                document.getElementById('imagePreview').classList.remove('show');
-                document.getElementById('productId').value = '';
-            }
-
-            modal.classList.add('active');
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('Image must be less than 5MB', true);
+            return;
         }
 
-        function closeModal() {
-            modal.classList.remove('active');
-            setTimeout(() => {
-                productForm.reset();
-                document.getElementById('imagePreview').classList.remove('show');
-                document.getElementById('urlInputGroup').classList.remove('show');
-                editingId = null;
-            }, 300);
-        }
-
-        // ===========================================
-        // IMAGE UPLOAD
-        // ===========================================
-        const imageUploadArea = document.getElementById('imageUploadArea');
-        const imageInput = document.getElementById('imageInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImg = document.getElementById('previewImg');
-        const removeImageBtn = document.getElementById('removeImageBtn');
-        const toggleUrlBtn = document.getElementById('toggleUrlBtn');
-        const urlInputGroup = document.getElementById('urlInputGroup');
-        const imageUrl = document.getElementById('imageUrl');
-
-        imageUploadArea.addEventListener('click', () => imageInput.click());
-
-        imageUploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.add('dragover');
-        });
-
-        imageUploadArea.addEventListener('dragleave', () => {
-            imageUploadArea.classList.remove('dragover');
-        });
-
-        imageUploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.remove('dragover');
-            if (e.dataTransfer.files.length) {
-                handleImageFile(e.dataTransfer.files[0]);
-            }
-        });
-
-        imageInput.addEventListener('change', (e) => {
-            if (e.target.files.length) handleImageFile(e.target.files[0]);
-        });
-
-        function handleImageFile(file) {
-            if (!file.type.startsWith('image/')) {
-                showToast('Please upload a valid image file', true);
-                return;
-            }
-
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('Image must be less than 5MB', true);
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewImg.src = e.target.result;
-                imagePreview.classList.add('show');
-                imageUrl.value = '';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        removeImageBtn.addEventListener('click', () => {
-            previewImg.src = '';
-            imagePreview.classList.remove('show');
-            imageInput.value = '';
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            currentImageData = e.target.result;
+            isNewImage = true;
+            imagePreview.classList.add('show');
             imageUrl.value = '';
-        });
+        };
+        reader.readAsDataURL(file);
+    }
 
-        toggleUrlBtn.addEventListener('click', () => {
-            urlInputGroup.classList.toggle('show');
-        });
+    removeImageBtn.addEventListener('click', () => {
+        previewImg.src = '';
+        currentImageData = null;
+        isNewImage = false;
+        imagePreview.classList.remove('show');
+        imageInput.value = '';
+        imageUrl.value = '';
+    });
 
-        imageUrl.addEventListener('input', () => {
-            if (imageUrl.value) {
-                previewImg.src = imageUrl.value;
-                imagePreview.classList.add('show');
-            }
-        });
+    toggleUrlBtn.addEventListener('click', () => {
+        urlInputGroup.classList.toggle('show');
+    });
 
-        // ===========================================
-        // FORM SUBMIT
-        // ===========================================
-        productForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+    imageUrl.addEventListener('input', () => {
+        if (imageUrl.value) {
+            previewImg.src = imageUrl.value;
+            currentImageData = imageUrl.value;
+            isNewImage = true;
+            imagePreview.classList.add('show');
+        }
+    });
 
-            const imageSource = previewImg.src;
-            if (!imageSource || imageSource === window.location.href) {
-                showToast('Please upload a product image', true);
-                return;
-            }
+    // ===========================================
+    // FORM SUBMIT
+    // ===========================================
+    productForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const product = {
-                id: editingId || 'prod_' + Date.now(),
-                name: document.getElementById('productName').value,
-                category: document.getElementById('productCategory').value,
-                price: document.getElementById('productPrice').value,
-                description: document.getElementById('productDescription').value,
-                stock: document.getElementById('productStock').value,
-                image: imageSource,
-                createdAt: editingId ? products.find(p => p.id === editingId).createdAt : Date.now()
-            };
+        const saveBtn = document.getElementById('saveBtn');
+        const originalText = saveBtn.textContent;
 
+        if (!previewImg.src || previewImg.src === window.location.href) {
+            showToast('Please upload a product image', true);
+            return;
+        }
+
+        const productData = {
+            name: document.getElementById('productName').value,
+            category: document.getElementById('productCategory').value,
+            price: document.getElementById('productPrice').value,
+            description: document.getElementById('productDescription').value,
+            stock: document.getElementById('productStock').value,
+        };
+
+        // Only send image if it's a new one
+        if (isNewImage && currentImageData) {
+            productData.image = currentImageData;
+        } else if (!editingId) {
+            productData.image = previewImg.src;
+        }
+
+        saveBtn.textContent = 'Saving...';
+        saveBtn.disabled = true;
+
+        try {
             if (editingId) {
-                const index = products.findIndex(p => p.id === editingId);
-                products[index] = product;
+                await api(`/api/products/${editingId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(productData),
+                });
                 showToast('Product updated successfully!');
             } else {
-                products.unshift(product);
+                await api('/api/products', {
+                    method: 'POST',
+                    body: JSON.stringify(productData),
+                });
                 showToast('Product added successfully!');
             }
 
-            saveProducts();
-            renderProducts();
-            updateStats();
+            await loadProducts();
+            await loadStats();
             closeModal();
-        });
+            isNewImage = false;
+            currentImageData = null;
+        } catch (e) {
+            showToast(e.message, true);
+        } finally {
+            saveBtn.textContent = originalText;
+            saveBtn.disabled = false;
+        }
+    });
 
-        // ===========================================
-        // EDIT & DELETE
-        // ===========================================
-        window.editProduct = function(id) {
-            const product = products.find(p => p.id === id);
-            if (product) openModal(product);
-        };
+    // ===========================================
+    // EDIT & DELETE
+    // ===========================================
+    window.editProduct = function(id) {
+        const product = products.find(p => p.id === id);
+        if (product) openModal(product);
+    };
 
-        window.confirmDelete = function(id) {
-            deleteId = id;
-            document.getElementById('confirmDialog').classList.add('active');
-        };
+    window.confirmDelete = function(id) {
+        deleteId = id;
+        document.getElementById('confirmDialog').classList.add('active');
+    };
 
-        document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+    document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+        document.getElementById('confirmDialog').classList.remove('active');
+        deleteId = null;
+    });
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+        if (!deleteId) return;
+        const btn = document.getElementById('confirmDeleteBtn');
+        btn.textContent = 'Deleting...';
+        btn.disabled = true;
+
+        try {
+            await api(`/api/products/${deleteId}`, { method: 'DELETE' });
+            await loadProducts();
+            await loadStats();
+            showToast('Product deleted successfully!');
+        } catch (e) {
+            showToast(e.message, true);
+        } finally {
             document.getElementById('confirmDialog').classList.remove('active');
+            btn.textContent = 'Delete';
+            btn.disabled = false;
             deleteId = null;
-        });
-
-        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-            if (deleteId) {
-                products = products.filter(p => p.id !== deleteId);
-                saveProducts();
-                renderProducts();
-                updateStats();
-                showToast('Product deleted successfully!');
-                document.getElementById('confirmDialog').classList.remove('active');
-                deleteId = null;
-            }
-        });
-
-        // ===========================================
-        // SEARCH & FILTER
-        // ===========================================
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('filterCategory').addEventListener('change', applyFilters);
-
-        function applyFilters() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const category = document.getElementById('filterCategory').value;
-
-            const filtered = products.filter(p => {
-                const matchSearch = p.name.toLowerCase().includes(search) || p.description.toLowerCase().includes(search);
-                const matchCategory = !category || p.category === category;
-                return matchSearch && matchCategory;
-            });
-
-            renderProducts(filtered);
         }
+    });
 
-        // ===========================================
-        // TOAST
-        // ===========================================
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.classList.toggle('error', isError);
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
+    // ===========================================
+    // SEARCH & FILTER
+    // ===========================================
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('filterCategory').addEventListener('change', applyFilters);
 
-        // ===========================================
-        // MOBILE SIDEBAR
-        // ===========================================
-        document.getElementById('mobileToggle').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('active');
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const category = document.getElementById('filterCategory').value;
+
+        const filtered = products.filter(p => {
+            const matchSearch = p.name.toLowerCase().includes(search) ||
+                                p.description.toLowerCase().includes(search);
+            const matchCategory = !category || p.category === category;
+            return matchSearch && matchCategory;
         });
 
-        // ===========================================
-        // INIT
-        // ===========================================
-        checkAuth();
-    </script>
+        renderProducts(filtered);
+    }
+
+    // ===========================================
+    // TOAST
+    // ===========================================
+    function showToast(message, isError = false) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastMessage').textContent = message;
+        toast.classList.toggle('error', isError);
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ===========================================
+    // MOBILE SIDEBAR
+    // ===========================================
+    document.getElementById('mobileToggle').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // ===========================================
+    // INIT
+    // ===========================================
+    checkAuth();
+</script>
 </body>
 </html>
