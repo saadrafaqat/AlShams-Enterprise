@@ -1,0 +1,2647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Shams Enterprises - Premium Hardware Solutions | Chakwal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --red: #C41E24;
+            --dark-red: #8B0000;
+            --navy: #1a1f36;
+            --dark: #0d1117;
+            --darker: #080b10;
+            --white: #ffffff;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-300: #d4d4d4;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--red);
+            border-radius: 4px;
+        }
+
+        /* Page Loader */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loader-wrapper.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: loaderFadeIn 0.8s ease 0.2s forwards;
+        }
+
+        .loader-logo span {
+            color: var(--red);
+            font-style: italic;
+        }
+
+        .loader-bar-container {
+            width: 200px;
+            height: 2px;
+            background: var(--gray-800);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+            opacity: 0;
+            animation: loaderFadeIn 0.8s ease 0.5s forwards;
+        }
+
+        .loader-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--red), #ff4444);
+            animation: loadBar 1.8s ease 0.6s forwards;
+        }
+
+        @keyframes loadBar {
+            0% { width: 0; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes loaderFadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Cursor Follower */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--red);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            width: 50px;
+            height: 50px;
+            border-color: rgba(196, 30, 36, 0.5);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+            background: transparent;
+        }
+
+        .navbar.scrolled {
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 60px;
+            border-bottom: 1px solid rgba(196, 30, 36, 0.2);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            z-index: 1001;
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            position: relative;
+        }
+
+        .nav-logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .nav-logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-logo-text span {
+            color: var(--red);
+            font-style: italic;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-300);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--red);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--white);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-inquiry-btn {
+            background: var(--red);
+            color: var(--white);
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-inquiry-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-inquiry-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-inquiry-btn:hover {
+            background: #d4252b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(196, 30, 36, 0.4);
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 2px;
+            background: var(--white);
+            transition: var(--transition);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 17, 23, 0.98);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: var(--transition);
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        .mobile-menu.active a {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu a:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu a:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu a:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu a:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu a:nth-child(5) { transition-delay: 0.5s; }
+
+        .mobile-menu a:hover {
+            color: var(--red);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 60px 100px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.35);
+            transform: scale(1.1);
+            animation: heroZoom 20s ease infinite alternate;
+        }
+
+        @keyframes heroZoom {
+            0% { transform: scale(1.1); }
+            100% { transform: scale(1.2); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(13, 17, 23, 0.3) 0%,
+                rgba(13, 17, 23, 0.5) 50%,
+                rgba(13, 17, 23, 0.95) 100%
+            );
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            color: var(--red);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease 2.5s forwards;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .hero-tag::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 35px;
+            height: 1px;
+            background: var(--red);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 400;
+            line-height: 1.05;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeUp 1s ease 2.7s forwards;
+        }
+
+        .hero-title em {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--red);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--gray-400);
+            line-height: 1.8;
+            max-width: 650px;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease 2.9s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease 3.1s forwards;
+        }
+
+        .btn-primary {
+            background: var(--red);
+            color: var(--white);
+            padding: 16px 40px;
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #d4252b;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(196, 30, 36, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 16px 40px;
+            border: 1px solid var(--gray-600);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--white);
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Particles in Hero */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--red);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Trust Bar */
+        .trust-bar {
+            background: var(--navy);
+            padding: 30px 60px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        .trust-bar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .trust-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .trust-item svg {
+            width: 28px;
+            height: 28px;
+            color: var(--red);
+            flex-shrink: 0;
+        }
+
+        .trust-item span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-300);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 120px 60px;
+            position: relative;
+        }
+
+        .section-tag {
+            color: var(--red);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .section-title em {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--red);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        /* Products Section */
+        .products-section {
+            background: var(--darker);
+        }
+
+        .products-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .products-header-left {
+            max-width: 600px;
+        }
+
+        .products-header p {
+            color: var(--gray-400);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .view-all-link {
+            color: var(--red);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .view-all-link:hover {
+            gap: 18px;
+        }
+
+        .view-all-link svg {
+            width: 20px;
+            height: 20px;
+            transition: var(--transition);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .product-card {
+            position: relative;
+            height: 450px;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: var(--transition);
+        }
+
+        .product-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+            filter: grayscale(30%);
+        }
+
+        .product-card:hover img {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+
+        .product-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.85) 0%,
+                rgba(0,0,0,0.2) 50%,
+                transparent 100%
+            );
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px 30px;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-card-overlay {
+            background: linear-gradient(
+                to top,
+                rgba(196, 30, 36, 0.8) 0%,
+                rgba(0,0,0,0.3) 50%,
+                transparent 100%
+            );
+        }
+
+        .product-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            transform: translateY(0);
+            transition: var(--transition);
+        }
+
+        .product-card-desc {
+            font-size: 0.9rem;
+            color: var(--gray-300);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        .product-card:hover .product-card-title {
+            transform: translateY(-10px);
+        }
+
+        .product-card:hover .product-card-desc {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* About Section */
+        .about-section {
+            background: var(--dark);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .about-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-left p {
+            color: var(--gray-400);
+            font-size: 1.05rem;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .about-stat {
+            text-align: center;
+        }
+
+        .about-stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--red);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .about-stat-label {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-500);
+        }
+
+        .about-right {
+            position: relative;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+
+        .about-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-image-main {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            filter: brightness(0.8);
+            transition: var(--transition);
+        }
+
+        .about-image-main:hover {
+            filter: brightness(1);
+        }
+
+        .about-image-accent {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 200px;
+            height: 200px;
+            background: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .about-image-accent span:first-child {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .about-image-accent span:last-child {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background: var(--gray-100);
+            color: var(--dark);
+        }
+
+        .reviews-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .reviews-header .section-title {
+            color: var(--dark);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .review-card {
+            background: var(--white);
+            padding: 45px 35px;
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(40px);
+            position: relative;
+        }
+
+        .review-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border-color: var(--red);
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 25px;
+        }
+
+        .review-stars svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--red);
+        }
+
+        .review-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--gray-700);
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .review-author {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .review-role {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-500);
+        }
+
+        .review-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--red);
+            transition: var(--transition);
+        }
+
+        .review-card:hover::before {
+            width: 100%;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            position: relative;
+            padding: 120px 60px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .cta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .cta-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.15);
+        }
+
+        .cta-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(139, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        .cta-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4.5vw, 3.5rem);
+            font-weight: 400;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .cta-title em {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .cta-desc {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            margin: 0 auto 50px;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-cta-outline {
+            background: transparent;
+            color: var(--white);
+            padding: 16px 40px;
+            border: 1px solid rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-cta-outline:hover {
+            background: var(--white);
+            color: var(--dark);
+            border-color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .btn-cta-solid {
+            background: var(--white);
+            color: var(--dark);
+            padding: 16px 40px;
+            border: 1px solid var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-cta-solid:hover {
+            background: transparent;
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--darker);
+            padding: 120px 60px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+        }
+
+        .contact-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s ease;
+        }
+
+        .contact-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .contact-info-list {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .contact-info-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(196, 30, 36, 0.1);
+            border: 1px solid rgba(196, 30, 36, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-info-icon svg {
+            width: 22px;
+            height: 22px;
+            color: var(--red);
+        }
+
+        .contact-info-text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .contact-info-text p {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .contact-info-text a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-info-text a:hover {
+            color: var(--red);
+        }
+
+        .contact-form {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.8s ease;
+        }
+
+        .contact-form.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--gray-800);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--red);
+            background: rgba(196, 30, 36, 0.03);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-submit {
+            width: 100%;
+            background: var(--red);
+            color: var(--white);
+            padding: 18px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: 0.6s;
+        }
+
+        .form-submit:hover::before {
+            left: 100%;
+        }
+
+        .form-submit:hover {
+            background: #d4252b;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(196, 30, 36, 0.3);
+        }
+
+        /* Map Section */
+        .map-section {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-section iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: grayscale(80%) contrast(1.1);
+            transition: var(--transition);
+        }
+
+        .map-section:hover iframe {
+            filter: grayscale(0%);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker);
+            padding: 80px 60px 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            text-decoration: none;
+        }
+
+        .footer-logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .footer-logo-text span {
+            color: var(--red);
+            font-style: italic;
+        }
+
+        .footer-brand p {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--gray-800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover {
+            border-color: var(--red);
+            background: rgba(196, 30, 36, 0.1);
+        }
+
+        .footer-social a svg {
+            width: 18px;
+            height: 18px;
+            color: var(--gray-400);
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover svg {
+            color: var(--red);
+        }
+
+        .footer-col h4 {
+            color: var(--red);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-col ul li a {
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--white);
+            padding-left: 8px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-bottom p {
+            color: var(--gray-600);
+            font-size: 0.8rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .footer-bottom-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--red);
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--red);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 900;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            background: #d4252b;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(196, 30, 36, 0.4);
+        }
+
+        .scroll-top svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 55px;
+            height: 55px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 900;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+            animation: whatsappPulse 2s ease infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+        }
+
+        .whatsapp-float svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        @keyframes whatsappPulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3); }
+            50% { box-shadow: 0 5px 30px rgba(37, 211, 102, 0.6); }
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Magnetic button effect */
+        .magnetic {
+            transition: transform 0.3s ease;
+        }
+
+        /* Smooth underline animation */
+        .animated-underline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .animated-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--red);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .animated-underline:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Horizontal Scroll Line */
+        .progress-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--red), #ff4444, var(--red));
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+
+        /* Stagger children animations */
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .stagger-children.visible > *:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .section {
+                padding: 80px 40px;
+            }
+
+            .navbar {
+                padding: 20px 30px;
+            }
+
+            .navbar.scrolled {
+                padding: 15px 30px;
+            }
+
+            .hero {
+                padding: 0 40px 80px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-inquiry-btn {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .section {
+                padding: 60px 25px;
+            }
+
+            .hero {
+                padding: 0 25px 60px;
+                min-height: 90vh;
+            }
+
+            .trust-bar {
+                padding: 25px;
+            }
+
+            .trust-bar-inner {
+                gap: 25px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card {
+                height: 350px;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+
+            .about-stat-number {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .cta-section {
+                padding: 80px 25px;
+            }
+
+            .contact-section {
+                padding: 60px 25px;
+            }
+
+            .footer {
+                padding: 60px 25px 25px;
+            }
+
+            .cursor {
+                display: none;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .products-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .about-image-accent {
+                width: 150px;
+                height: 150px;
+                bottom: -20px;
+                left: -10px;
+            }
+
+            .about-image-accent span:first-child {
+                font-size: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .trust-item span {
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        /* Page transitions for multi-page feel */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--red);
+            z-index: 99998;
+            transform: scaleY(0);
+            transform-origin: bottom;
+        }
+
+        /* Noise texture overlay */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Smooth Marquee for trust bar */
+        .marquee-wrapper {
+            overflow: hidden;
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Glowing line separator */
+        .glow-line {
+            width: 80px;
+            height: 2px;
+            background: var(--red);
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .glow-line::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--red);
+            filter: blur(6px);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">Al Shams <span>Enterprises</span></div>
+            <div class="loader-bar-container">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- Progress Line -->
+    <div class="progress-line" id="progressLine"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Page Transition -->
+    <div class="page-transition"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="#home" class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 5L8 12V28L20 35L32 28V12L20 5Z" stroke="#C41E24" stroke-width="1.5" fill="none"/>
+                    <path d="M20 5L20 35" stroke="#C41E24" stroke-width="1" opacity="0.5"/>
+                    <path d="M8 12L32 28" stroke="#C41E24" stroke-width="1" opacity="0.5"/>
+                    <path d="M32 12L8 28" stroke="#C41E24" stroke-width="1" opacity="0.5"/>
+                    <circle cx="20" cy="20" r="4" fill="#C41E24"/>
+                </svg>
+            </div>
+            <div class="nav-logo-text">Al Shams <span>Enterprises</span></div>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <a href="#contact" class="nav-inquiry-btn magnetic">INQUIRY</a>
+
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#products">Products</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebb6525?w=1920&q=80" alt="Warehouse interior with industrial hardware shelving">
+        </div>
+        <div class="hero-overlay"></div>
+
+        <!-- Floating Particles -->
+        <div class="particle" style="left: 10%; animation-duration: 15s; animation-delay: 0s; width: 2px; height: 2px;"></div>
+        <div class="particle" style="left: 20%; animation-duration: 18s; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 35%; animation-duration: 12s; animation-delay: 4s; width: 4px; height: 4px;"></div>
+        <div class="particle" style="left: 50%; animation-duration: 20s; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 65%; animation-duration: 16s; animation-delay: 3s; width: 2px; height: 2px;"></div>
+        <div class="particle" style="left: 80%; animation-duration: 14s; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 90%; animation-duration: 22s; animation-delay: 2.5s; width: 4px; height: 4px;"></div>
+
+        <div class="hero-content">
+            <div class="hero-tag">Premium Hardware Solutions</div>
+            <h1 class="hero-title">Excellence in<br><em>Precision</em><br>Engineering</h1>
+            <p class="hero-desc">Chakwal's premier destination for genuine tools, specialized vehicle equipment, and high-tensile hardware. Where quality meets uncompromising reliability.</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn-primary magnetic">Explore Stock</a>
+                <a href="#about" class="btn-secondary magnetic">Our Story</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="trust-bar-inner stagger-children" id="trustBar">
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span>100% Genuine</span>
+            </div>
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C5.71 4 7 5.25 7 6.5V9"/>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C18.29 4 17 5.25 17 6.5V9"/>
+                    <path d="M4 22h16"/>
+                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                </svg>
+                <span>Expert Choice</span>
+            </div>
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span>5.0 Rated</span>
+            </div>
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="1" y="3" width="15" height="13"/>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+                <span>Rapid Delivery</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="section products-section" id="products">
+        <div class="products-header">
+            <div class="products-header-left reveal">
+                <span class="section-tag">Our Inventory</span>
+                <h2 class="section-title">Engineered for the <em>Modern</em> Industrialist</h2>
+                <p>We specialize in high-spec hardware that generic shops don't stock. From high-tensile cable ties to specialized vehicle tooling.</p>
+            </div>
+            <a href="#products" class="view-all-link reveal">
+                View All Inventory
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1530124566582-a45a7c0be13a?w=600&q=80" alt="Specialized chrome steel socket wrenches and tools">
+                <div class="product-card-overlay">
+                    <h3 class="product-card-title">Specialized Tools</h3>
+                    <p class="product-card-desc">Professional-grade hand tools, socket sets, wrenches, and precision instruments for every industrial application.</p>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80" alt="Industrial grade nuts bolts and fasteners">
+                <div class="product-card-overlay">
+                    <h3 class="product-card-title">Industrial Hardware</h3>
+                    <p class="product-card-desc">High-tensile fasteners, nuts, bolts, cable ties from 4 to 18 inches, and precision-machined components.</p>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=600&q=80" alt="Essential hardware supplies including screws and nails">
+                <div class="product-card-overlay">
+                    <h3 class="product-card-title">Essential Supplies</h3>
+                    <p class="product-card-desc">Complete range of construction and maintenance essentials including wire, adhesives, fittings, and safety equipment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about-section" id="about">
+        <div class="about-grid">
+            <div class="about-left">
+                <span class="section-tag">Our Legacy</span>
+                <h2 class="section-title">A Legacy of <em>Reliability</em></h2>
+                <div class="glow-line"></div>
+                <p>Al Shams Enterprises has been serving Chakwal and surrounding regions with unmatched dedication to quality hardware solutions. Located near the heart of the city on Girls College Road, we have built our reputation on trust, expertise, and an unwavering commitment to stocking only genuine products.</p>
+                <p>Our team understands the precise needs of mechanical engineers, workshop owners, civil contractors, and construction professionals. We don't just sell tools -- we provide solutions that keep your projects moving forward.</p>
+
+                <div class="about-stats stagger-children" id="aboutStats">
+                    <div class="about-stat">
+                        <span class="about-stat-number" data-target="3000">0</span>
+                        <span class="about-stat-label">Facebook Followers</span>
+                    </div>
+                    <div class="about-stat">
+                        <span class="about-stat-number" data-target="21">0</span>
+                        <span class="about-stat-label">5-Star Reviews</span>
+                    </div>
+                    <div class="about-stat">
+                        <span class="about-stat-number" data-target="500">0</span>
+                        <span class="about-stat-label">Products Stocked</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-right">
+                <img class="about-image-main" src="https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=800&q=80" alt="Hardware store interior showing organized shelves of tools and equipment">
+                <div class="about-image-accent">
+                    <span>5.0</span>
+                    <span>Google Rating</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="section reviews-section" id="reviews">
+        <div class="reviews-header reveal">
+            <span class="section-tag" style="color: var(--red);">Client Experiences</span>
+            <h2 class="section-title">Trusted by <em>Professionals</em></h2>
+        </div>
+
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-stars">
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <p class="review-text">"If you have specific, technical needs for your vehicle or equipment, this is the place to check first. Their specialized stock is top-notch, and the pricing is very competitive."</p>
+                <div class="review-author">Naveed Malik</div>
+                <div class="review-role">Mechanical Engineer</div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-stars">
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <p class="review-text">"Exactly what I needed without pushing unnecessary items. The quality of their tools is top-notch and 100% genuine. Prices are very reasonable compared to other shops."</p>
+                <div class="review-author">Zubair Khan</div>
+                <div class="review-role">Workshop Owner</div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-stars">
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <p class="review-text">"Very good quality and reasonable price tools. I have tried multiple times and they never disappoint with the build quality of their hardware items."</p>
+                <div class="review-author">Ahmed Raza</div>
+                <div class="review-role">Civil Contractor</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1920&q=80" alt="Workshop tools and equipment background">
+        </div>
+        <div class="cta-overlay"></div>
+
+        <div class="reveal">
+            <h2 class="cta-title">Need a <em>Specific</em> Tool or Bulk Order?</h2>
+            <p class="cta-desc">Visit us in Chakwal or contact us directly for inventory checks and specialized procurement.</p>
+            <div class="cta-buttons">
+                <a href="#contact" class="btn-cta-outline magnetic">Contact Sales</a>
+                <a href="tel:03205350072" class="btn-cta-solid magnetic">Call 0320 5350072</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="contact-grid">
+            <div class="contact-left">
+                <span class="section-tag">Get In Touch</span>
+                <h2 class="section-title">Let's <em>Connect</em></h2>
+                <div class="glow-line"></div>
+
+                <div class="contact-info-list">
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info-text">
+                            <h4>Visit Our Store</h4>
+                            <p>15 Chowk Girls College Rd, near Ask Solar, Chakwal, 48800</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info-text">
+                            <h4>Call Us</h4>
+                            <p><a href="tel:03205350072">0320 5350072</a></p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info-text">
+                            <h4>Business Hours</h4>
+                            <p>Saturday - Thursday: 8:30 AM - 8:00 PM<br>Friday: Closed</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info-text">
+                            <h4>Follow Us</h4>
+                            <p><a href="https://www.facebook.com/AlShamasEnterprisesChakwal" target="_blank">Al Shamas Enterprises Chakwal - 3K+ Followers</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" placeholder="03XX XXXXXXX" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Inquiry Type</label>
+                        <select required>
+                            <option value="" disabled selected>Select inquiry type</option>
+                            <option>Product Availability</option>
+                            <option>Bulk Order</option>
+                            <option>Price Inquiry</option>
+                            <option>Specialized Procurement</option>
+                            <option>General Question</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Your Message</label>
+                        <textarea placeholder="Describe what you need..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="form-submit magnetic">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <div class="map-section">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3364.1!2d72.8556!3d32.9296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzLCsDU1JzQ2LjYiTiA3MsKwNTEnMjAuMiJF!5e0!3m2!1sen!2s!4v1234567890" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Al Shams Enterprises Location Map"></iframe>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#home" class="footer-logo">
+                    <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 5L8 12V28L20 35L32 28V12L20 5Z" stroke="#C41E24" stroke-width="1.5"/>
+                        <circle cx="20" cy="20" r="4" fill="#C41E24"/>
+                    </svg>
+                    <div class="footer-logo-text">Al Shams <span>Enterprises</span></div>
+                </a>
+                <p>Chakwal's trusted hardware destination. Premium tools, industrial-grade supplies, and specialized equipment -- all under one roof.</p>
+                <div class="footer-social">
+                    <a href="https://www.facebook.com/AlShamasEnterprisesChakwal" target="_blank" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </a>
+                    <a href="https://wa.me/923205350072" target="_blank" aria-label="WhatsApp">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+                    </a>
+                    <a href="tel:03205350072" aria-label="Phone">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Specialized Stock</h4>
+                <ul>
+                    <li><a href="#products">Hand Tools</a></li>
+                    <li><a href="#products">Cable Ties (4"-18")</a></li>
+                    <li><a href="#products">Vehicle Equipment</a></li>
+                    <li><a href="#products">Fasteners & Bolts</a></li>
+                    <li><a href="#products">Safety Equipment</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li><a href="tel:03205350072">0320 5350072</a></li>
+                    <li><a href="#contact">15 Chowk Girls College Rd</a></li>
+                    <li><a href="#contact">Near Ask Solar, Chakwal</a></li>
+                    <li><a href="#contact">Punjab, Pakistan 48800</a></li>
+                    <li><a href="#contact">Sat-Thu: 8:30 AM - 8:00 PM</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>2024 Al Shams Enterprises, Chakwal. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"/>
+        </svg>
+    </button>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/923205350072" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+    </a>
+
+    <script>
+        // ======================
+        // PAGE LOADER
+        // ======================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2800);
+        });
+
+        // ======================
+        // CUSTOM CURSOR
+        // ======================
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover effect on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .product-card, .review-card, .magnetic');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ======================
+        // SCROLL PROGRESS LINE
+        // ======================
+        const progressLine = document.getElementById('progressLine');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressLine.style.width = scrollPercent + '%';
+        });
+
+        // ======================
+        // NAVBAR SCROLL EFFECT
+        // ======================
+        const navbar = document.getElementById('navbar');
+        const scrollTop = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            if (window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        // Scroll to top
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ======================
+        // MOBILE MENU
+        // ======================
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ======================
+        // ACTIVE NAV LINK ON SCROLL
+        // ======================
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 200;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ======================
+        // SCROLL REVEAL ANIMATIONS
+        // ======================
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+
+                    // Counter animation for stats
+                    if (entry.target.id === 'aboutStats') {
+                        animateCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe reveal elements
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .product-card, .review-card, .about-left, .about-right, .contact-left, .contact-form, .stagger-children, .trust-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ======================
+        // COUNTER ANIMATION
+        // ======================
+        let countersAnimated = false;
+
+        function animateCounters() {
+            if (countersAnimated) return;
+            countersAnimated = true;
+
+            document.querySelectorAll('.about-stat-number[data-target]').forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const start = performance.now();
+
+                function updateCounter(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // Ease out cubic
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(eased * target);
+
+                    if (target >= 1000) {
+                        counter.textContent = (current / 1000).toFixed(current >= target ? 0 : 1) + 'K+';
+                    } else {
+                        counter.textContent = current + '+';
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        if (target >= 1000) {
+                            counter.textContent = (target / 1000) + 'K+';
+                        } else {
+                            counter.textContent = target + '+';
+                        }
+                    }
+                }
+
+                requestAnimationFrame(updateCounter);
+            });
+        }
+
+        // ======================
+        // PRODUCT CARD STAGGER
+        // ======================
+        const productCards = document.querySelectorAll('.product-card');
+        const productObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 200);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        productCards.forEach(card => productObserver.observe(card));
+
+        // ======================
+        // REVIEW CARD STAGGER
+        // ======================
+        const reviewCards = document.querySelectorAll('.review-card');
+        const reviewObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const cards = document.querySelectorAll('.review-card');
+                    cards.forEach((card, i) => {
+                        setTimeout(() => {
+                            card.classList.add('visible');
+                        }, i * 200);
+                    });
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reviewCards.forEach(card => reviewObserver.observe(card));
+
+        // ======================
+        // TRUST BAR STAGGER
+        // ======================
+        const trustItems = document.querySelectorAll('.trust-item');
+        const trustObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    trustItems.forEach((item, i) => {
+                        setTimeout(() => {
+                            item.classList.add('visible');
+                        }, i * 150);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        trustItems.forEach(item => trustObserver.observe(item));
+
+        // ======================
+        // MAGNETIC BUTTON EFFECT
+        // ======================
+        document.querySelectorAll('.magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // ======================
+        // SMOOTH SCROLL
+        // ======================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ======================
+        // FORM SUBMISSION
+        // ======================
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const btn = this.querySelector('.form-submit');
+            const originalText = btn.textContent;
+            btn.textContent = 'SENDING...';
+            btn.style.opacity = '0.7';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.textContent = 'INQUIRY SENT!';
+                btn.style.opacity = '1';
+                btn.style.background = '#25D366';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                    this.reset();
+                }, 2500);
+            }, 1500);
+        });
+
+        // ======================
+        // PARALLAX ON SCROLL (Subtle)
+        // ======================
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const heroBg = document.querySelector('.hero-bg img');
+            if (heroBg && scrolled < window.innerHeight) {
+                heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.15}px)`;
+            }
+        });
+
+        // ======================
+        // TILT EFFECT ON PRODUCT CARDS
+        // ======================
+        productCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                const y = (e.clientY - rect.top) / rect.height;
+                const rotateX = (y - 0.5) * -8;
+                const rotateY = (x - 0.5) * 8;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+        // ======================
+        // TEXT SCRAMBLE EFFECT (Hero tag)
+        // ======================
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                this.chars = '!<>-_\\/[]{}=+*^?#________';
+                this.update = this.update.bind(this);
+            }
+            setText(newText) {
+                const oldText = this.el.innerText;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40);
+                    const end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
+                }
+                cancelAnimationFrame(this.frameRequest);
+                this.frame = 0;
+                this.update();
+                return promise;
+            }
+            update() {
+                let output = '';
+                let complete = 0;
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    if (this.frame >= end) {
+                        complete++;
+                        output += to;
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) {
+                            char = this.chars[Math.floor(Math.random() * this.chars.length)];
+                            this.queue[i].char = char;
+                        }
+                        output += `<span style="color: var(--red); opacity: 0.6;">${char}</span>`;
+                    } else {
+                        output += from;
+                    }
+                }
+                this.el.innerHTML = output;
+                if (complete === this.queue.length) {
+                    this.resolve();
+                } else {
+                    this.frameRequest = requestAnimationFrame(this.update);
+                    this.frame++;
+                }
+            }
+        }
+
+        // Apply scramble effect after loader
+        setTimeout(() => {
+            const heroTag = document.querySelector('.hero-tag');
+            if (heroTag) {
+                const fx = new TextScramble(heroTag);
+                fx.setText('Premium Hardware Solutions');
+            }
+        }, 3200);
+
+    </script>
+</body>
+</html>
