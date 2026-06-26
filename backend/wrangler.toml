@@ -1,0 +1,16 @@
+name = "alshams-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "alshams-db"
+database_id = "YOUR_DATABASE_ID_HERE"
+
+[vars]
+CLOUDINARY_CLOUD_NAME = "your_cloud_name"
+CLOUDINARY_API_KEY = "your_api_key"
+CORS_ORIGIN = "*"
+
+# Set secrets via: wrangler secret put CLOUDINARY_API_SECRET
+# wrangler secret put JWT_SECRET
